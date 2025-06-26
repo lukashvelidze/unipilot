@@ -53,24 +53,29 @@
       });
     }
 
-    // Wait until Paddle is fully loaded
-    window.addEventListener("load", () => {
-      if (window.Paddle) {
-        Paddle.Environment.set("sandbox");
-        Paddle.Setup({
-          token: "test_c25cc3df5ddfcd6b3b2a8420700"
-        });
+    function waitForPaddle(callback, timeout = 5000) {
+      const interval = 100;
+      let waited = 0;
+      const check = () => {
+        if (window.Paddle) {
+          callback();
+        } else if (waited < timeout) {
+          waited += interval;
+          setTimeout(check, interval);
+        } else {
+          document.getElementById("fallback-button").style.display = "inline-block";
+        }
+      };
+      check();
+    }
 
-        // Try to launch automatically
-        setTimeout(() => {
-          try {
-            launchCheckout();
-          } catch (e) {
-            console.warn("Autolaunch failed:", e);
-            document.getElementById("fallback-button").style.display = "inline-block";
-          }
-        }, 500); // slight delay to ensure setup is complete
-      } else {
+    waitForPaddle(() => {
+      Paddle.Environment.set("sandbox");
+      Paddle.Setup({ token: "test_c25cc3df5ddfcd6b3b2a8420700" });
+      try {
+        launchCheckout();
+      } catch (e) {
+        console.warn("Autolaunch failed:", e);
         document.getElementById("fallback-button").style.display = "inline-block";
       }
     });
