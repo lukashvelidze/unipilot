@@ -1,84 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>UniPilot Checkout</title>
   <script src="https://cdn.paddle.com/paddle.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 2em;
-      text-align: center;
-      background-color: #f4f4f4;
-    }
-    h2 {
-      margin-bottom: 1em;
-    }
-    #fallback-button {
-      display: none;
-      padding: 1em 2em;
-      font-size: 16px;
-      background-color: #0051ff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    #fallback-button:hover {
-      background-color: #003fcc;
-    }
-  </style>
 </head>
 <body>
-  <h2>Launching secure checkout…</h2>
-  <button id="fallback-button" onclick="launchCheckout()">Open Checkout Manually</button>
+  <button id="buy">Subscribe Now</button>
 
   <script>
-    const email = new URLSearchParams(window.location.search).get("email") || "";
+    Paddle.Setup({ vendor: 33436 }); // Your actual vendor ID
 
-    function launchCheckout() {
-      if (!window.Paddle || !Paddle.Checkout) {
-        alert("Paddle failed to load.");
-        return;
-      }
+    const productId = pro_01jyk34xa92kd6h2x3vw7sv5tf; // Your actual product ID (number), NOT price ID
+    const email = new URLSearchParams(window.location.search).get('email') || '';
 
+    document.getElementById('buy').onclick = () => {
       Paddle.Checkout.open({
-        items: [{ priceId: "pri_01jyk3h7eec66x5m7h31p66r8w" }],
-        customer: { email },
-        settings: {
-          displayMode: "redirect",
-          successUrl: "https://lukashvelidze.github.io/unipilot/?success=true",
-          cancelUrl: "https://lukashvelidze.github.io/unipilot/"
-        }
+        product: productId,
+        email: email,
+        successCallback: () => {
+          window.location.href = window.location.pathname + "?success=true";
+        },
       });
-    }
-
-    function waitForPaddle(callback, timeout = 5000) {
-      const interval = 100;
-      let waited = 0;
-      const check = () => {
-        if (window.Paddle) {
-          callback();
-        } else if (waited < timeout) {
-          waited += interval;
-          setTimeout(check, interval);
-        } else {
-          document.getElementById("fallback-button").style.display = "inline-block";
-        }
-      };
-      check();
-    }
-
-    waitForPaddle(() => {
-      Paddle.Environment.set("sandbox");
-      Paddle.Setup({ token: "test_c25cc3df5ddfcd6b3b2a8420700" });
-      try {
-        launchCheckout();
-      } catch (e) {
-        console.warn("Autolaunch failed:", e);
-        document.getElementById("fallback-button").style.display = "inline-block";
-      }
-    });
+    };
   </script>
 </body>
 </html>
