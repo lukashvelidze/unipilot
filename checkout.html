@@ -2,67 +2,59 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>UniPilot Checkout</title>
+    <title>UniPilot Inline Checkout</title>
     <script src="https://cdn.paddle.com/paddle.js"></script>
     <style>
       body {
         font-family: Arial, sans-serif;
         padding: 2em;
-        text-align: center;
         background-color: #f4f4f4;
+        text-align: center;
       }
-      button {
-        font-size: 18px;
-        padding: 1em 2em;
-        background: #0070f3;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
+      #checkout-container {
+        margin-top: 30px;
       }
     </style>
   </head>
   <body>
-    <h2>Start Your UniPilot Premium Subscription</h2>
-    <button id="pay">Subscribe with Paddle</button>
+    <h2>Subscribe to UniPilot Premium</h2>
+    <div id="checkout-container"></div>
 
-    <script>
+    <script type="text/javascript">
+      // Extract email from query string
       const urlParams = new URLSearchParams(window.location.search);
       const email = urlParams.get("email") || "test@example.com";
-      const clientToken = "test_c25cc3df5ddfcd6b3b2a8420700"; // your test token
-      const priceId = "pri_01jyk3h7eec66x5m7h31p66r8w";
 
-      const tryInitialize = () => {
-        if (typeof Paddle === "undefined") {
-          console.log("Paddle not loaded yet...");
-          setTimeout(tryInitialize, 100);
-          return;
-        }
+      // Configure Paddle environment
+      Paddle.Environment.set("sandbox"); // Use "production" when ready
 
-        console.log("Paddle loaded, initializing...");
-        Paddle.Environment.set("sandbox");
-        Paddle.Initialize({ token: clientToken });
-
-        const btn = document.getElementById("pay");
-        btn.addEventListener("click", () => {
-          console.log("Opening Paddle checkout...");
-          try {
-            Paddle.Checkout.open({
-              items: [{ priceId }],
-              customer: { email },
-              settings: {
-                displayMode: "overlay",
-                successUrl: "https://lukashvelidze.github.io/unipilot/success.html",
-              },
-            });
-          } catch (e) {
-            console.error("Failed to open checkout", e);
-            alert("Something went wrong. Please try again later.");
+      // Initialize Paddle
+      Paddle.Initialize({
+        token: "test_c25cc3df5ddfcd6b3b2a8420700", // your real client-side token
+        checkout: {
+          settings: {
+            displayMode: "inline",
+            frameTarget: "checkout-container",
+            frameInitialHeight: "450",
+            frameStyle:
+              "width: 100%; min-width: 312px; background-color: transparent; border: none;"
           }
-        });
-      };
+        }
+      });
 
-      tryInitialize();
+      // Define items
+      const items = [
+        {
+          priceId: "pri_01jyk3h7eec66x5m7h31p66r8w",
+          quantity: 1
+        }
+      ];
+
+      // Open checkout inline
+      Paddle.Checkout.open({
+        items,
+        customer: { email }
+      });
     </script>
   </body>
 </html>
