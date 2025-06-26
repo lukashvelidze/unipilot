@@ -3,24 +3,30 @@
 <html>
   <head>
     <title>UniPilot Checkout</title>
-    <script src="https://cdn.paddle.com/paddle.js"></script>
-  </head>
-  <body>
-    <h2>Redirecting to Paddle...</h2>
     <script>
       const urlParams = new URLSearchParams(window.location.search);
       const email = urlParams.get("email");
 
-      Paddle.Environment.set("sandbox"); // or "production"
-      Paddle.Initialize({ token: "test_c25cc3df5ddfcd6b3b2a8420700" });
+      function initializeCheckout() {
+        if (typeof Paddle === "undefined") {
+          setTimeout(initializeCheckout, 100); // wait until Paddle is available
+          return;
+        }
 
-      Paddle.Checkout.open({
-        items: [{ priceId: "pri_01jyk3h7eec66x5m7h31p66r8w" }],
-        customer: { email },
-        settings: {
-          displayMode: "inline",
-        },
-      });
+        Paddle.Environment.set("sandbox"); // change to "production" later
+        Paddle.Initialize({ token: "test_c25cc3df5ddfcd6b3b2a8420700" });
+
+        Paddle.Checkout.open({
+          items: [{ priceId: "pri_01jyk3h7eec66x5m7h31p66r8w" }],
+          customer: { email },
+          settings: {
+            displayMode: "inline", // or "overlay" if you want a modal
+            
+          },
+        });
+      }
+
+      initializeCheckout();
     </script>
   </body>
 </html>
