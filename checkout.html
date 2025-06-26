@@ -8,24 +8,33 @@
 <body>
   <button id="buy">Subscribe Now</button>
 
-  <script src="https://cdn.paddle.com/paddle.js"></script>
   <script>
     window.onload = () => {
-      Paddle.Setup({ vendor: 33436 });
+      // ✅ Ensure Paddle is defined
+      if (typeof Paddle === 'undefined') {
+        alert("Paddle is not available. Check your internet connection or script URL.");
+        return;
+      }
+
+      Paddle.Setup({ vendor: 33436 }); // your real vendor ID
 
       const email = new URLSearchParams(window.location.search).get('email') || '';
+      const productId = pro_01jyk34xa92kd6h2x3vw7sv5tf; // ⚠️ use your real numeric product ID (not priceId)
 
       document.getElementById('buy').onclick = () => {
         Paddle.Checkout.open({
-          product: 123456,
+          product: productId,
           email: email,
           successCallback: () => {
             window.location.href = window.location.pathname + "?success=true";
           },
+          errorCallback: (err) => {
+            console.error("Checkout failed:", err);
+            alert("Checkout failed. See console for details.");
+          }
         });
       };
     };
-</script>
-
+  </script>
 </body>
 </html>
