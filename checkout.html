@@ -29,32 +29,40 @@
     <script>
       const urlParams = new URLSearchParams(window.location.search);
       const email = urlParams.get("email") || "test@example.com";
+      const clientToken = "test_c25cc3df5ddfcd6b3b2a8420700"; // your test token
+      const priceId = "pri_01jyk3h7eec66x5m7h31p66r8w";
 
-      const clientToken = "test_c25cc3df5ddfcd6b3b2a8420700"; // Replace in prod
-      const priceId = "pri_01jyk3h7eec66x5m7h31p66r8w"; // Your real price ID
-
-      function setupPaddle() {
+      const tryInitialize = () => {
         if (typeof Paddle === "undefined") {
-          setTimeout(setupPaddle, 100);
+          console.log("Paddle not loaded yet...");
+          setTimeout(tryInitialize, 100);
           return;
         }
 
-        Paddle.Environment.set("sandbox"); // Use "production" when live
+        console.log("Paddle loaded, initializing...");
+        Paddle.Environment.set("sandbox");
         Paddle.Initialize({ token: clientToken });
 
-        document.getElementById("pay").addEventListener("click", () => {
-          Paddle.Checkout.open({
-            items: [{ priceId }],
-            customer: { email },
-            settings: {
-              displayMode: "overlay", // overlay works better than inline in mobile
-              successUrl: "https://lukashvelidze.github.io/unipilot/success.html",
-            },
-          });
+        const btn = document.getElementById("pay");
+        btn.addEventListener("click", () => {
+          console.log("Opening Paddle checkout...");
+          try {
+            Paddle.Checkout.open({
+              items: [{ priceId }],
+              customer: { email },
+              settings: {
+                displayMode: "overlay",
+                successUrl: "https://lukashvelidze.github.io/unipilot/success.html",
+              },
+            });
+          } catch (e) {
+            console.error("Failed to open checkout", e);
+            alert("Something went wrong. Please try again later.");
+          }
         });
-      }
+      };
 
-      setupPaddle();
+      tryInitialize();
     </script>
   </body>
 </html>
