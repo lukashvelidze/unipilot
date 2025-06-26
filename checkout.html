@@ -1,32 +1,60 @@
-<!-- checkout.html -->
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8" />
     <title>UniPilot Checkout</title>
+    <script src="https://cdn.paddle.com/paddle.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 2em;
+        text-align: center;
+        background-color: #f4f4f4;
+      }
+      h2 {
+        margin-bottom: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Redirecting to Paddle...</h2>
+
     <script>
       const urlParams = new URLSearchParams(window.location.search);
-      const email = urlParams.get("email");
+      const email = urlParams.get("email") || "test@example.com";
 
-      function initializeCheckout() {
+      function loadCheckout() {
         if (typeof Paddle === "undefined") {
-          setTimeout(initializeCheckout, 100); // wait until Paddle is available
+          setTimeout(loadCheckout, 100);
           return;
         }
 
-        Paddle.Environment.set("sandbox"); // change to "production" later
-        Paddle.Initialize({ token: "test_c25cc3df5ddfcd6b3b2a8420700" });
+        try {
+          Paddle.Environment.set("sandbox"); // change to "production" when live
 
-        Paddle.Checkout.open({
-          items: [{ priceId: "pri_01jyk3h7eec66x5m7h31p66r8w" }],
-          customer: { email },
-          settings: {
-            displayMode: "inline", // or "overlay" if you want a modal
-            
-          },
-        });
+          Paddle.Initialize({
+            token: "test_c25cc3df5ddfcd6b3b2a8420700", // your test client token
+          });
+
+          Paddle.Checkout.open({
+            items: [
+              {
+                priceId: "pri_01jyk3h7eec66x5m7h31p66r8w", // your real priceId
+              },
+            ],
+            customer: {
+              email,
+            },
+            settings: {
+              displayMode: "overlay", // use 'overlay' for mobile
+            },
+          });
+        } catch (error) {
+          document.body.innerHTML = "<h2>Error loading Paddle checkout</h2><pre>" + error + "</pre>";
+        }
       }
 
-      initializeCheckout();
+      loadCheckout();
     </script>
   </body>
 </html>
