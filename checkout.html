@@ -11,50 +11,50 @@
         text-align: center;
         background-color: #f4f4f4;
       }
-      h2 {
-        margin-bottom: 1em;
+      button {
+        font-size: 18px;
+        padding: 1em 2em;
+        background: #0070f3;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
       }
     </style>
   </head>
   <body>
-    <h2>Redirecting to Paddle...</h2>
+    <h2>Start Your UniPilot Premium Subscription</h2>
+    <button id="pay">Subscribe with Paddle</button>
 
     <script>
       const urlParams = new URLSearchParams(window.location.search);
       const email = urlParams.get("email") || "test@example.com";
 
-      function loadCheckout() {
+      const clientToken = "test_e8c70f35e280794bf86dfec199c"; // Replace in prod
+      const priceId = "pri_01jyk3h7eec66x5m7h31p66r8w"; // Your real price ID
+
+      function setupPaddle() {
         if (typeof Paddle === "undefined") {
-          setTimeout(loadCheckout, 100);
+          setTimeout(setupPaddle, 100);
           return;
         }
 
-        try {
-          Paddle.Environment.set("sandbox"); // change to "production" when live
+        Paddle.Environment.set("sandbox"); // Use "production" when live
+        Paddle.Initialize({ token: clientToken });
 
-          Paddle.Initialize({
-            token: "test_c25cc3df5ddfcd6b3b2a8420700", // your test client token
-          });
-
+        document.getElementById("pay").addEventListener("click", () => {
           Paddle.Checkout.open({
-            items: [
-              {
-                priceId: "pri_01jyk3h7eec66x5m7h31p66r8w", // your real priceId
-              },
-            ],
-            customer: {
-              email,
-            },
+            items: [{ priceId }],
+            customer: { email },
             settings: {
-              displayMode: "overlay", // use 'overlay' for mobile
+              displayMode: "overlay", // overlay works better than inline in mobile
+              successUrl: "https://lukashvelidze.github.io/unipilot/success.html",
             },
           });
-        } catch (error) {
-          document.body.innerHTML = "<h2>Error loading Paddle checkout</h2><pre>" + error + "</pre>";
-        }
+        });
       }
 
-      loadCheckout();
+      setupPaddle();
     </script>
   </body>
 </html>
