@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>UniPilot Checkout</title>
+  <script src="https://cdn.paddle.com/paddle.js"></script>
+</head>
+<body>
+  <h2>Launching secure checkout…</h2>
+  <script>
+    const email = new URLSearchParams(window.location.search).get("email") || "";
+
+    Paddle.Environment.set("sandbox");
+    Paddle.Setup({
+      token: "test_e8c70f35e280794bf86dfec199c"
+    });
+
+    Paddle.Checkout.open({
+      items: [{ priceId: "pri_01jyk3h7eec66x5m7h31p66r8w" }],
+      customer: { email },
+      settings: {
+        displayMode: "redirect",
+        successUrl: "https://lukashvelidze.github.io/unipilot/?success=true",
+        cancelUrl: "https://lukashvelidze.github.io/unipilot/"
+      }
+    });
+  </script>
+</body>
+</html>
