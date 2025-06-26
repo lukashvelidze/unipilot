@@ -1,40 +1,26 @@
+<!-- checkout.html -->
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>UniPilot Checkout</title>
-  <script src="https://cdn.paddle.com/paddle.js"></script>
-</head>
-<body>
-  <button id="buy">Subscribe Now</button>
+<html>
+  <head>
+    <title>UniPilot Checkout</title>
+    <script src="https://cdn.paddle.com/paddle.js"></script>
+  </head>
+  <body>
+    <h2>Redirecting to Paddle...</h2>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const email = urlParams.get("email");
 
-  <script>
-    window.onload = () => {
-      // ✅ Ensure Paddle is defined
-      if (typeof Paddle === 'undefined') {
-        alert("Paddle is not available. Check your internet connection or script URL.");
-        return;
-      }
+      Paddle.Environment.set("sandbox"); // or "production"
+      Paddle.Initialize({ token: "test_c25cc3df5ddfcd6b3b2a8420700" });
 
-      Paddle.Setup({ vendor: 33436 }); // your real vendor ID
-
-      const email = new URLSearchParams(window.location.search).get('email') || '';
-      const productId = pro_01jyk34xa92kd6h2x3vw7sv5tf; // ⚠️ use your real numeric product ID (not priceId)
-
-      document.getElementById('buy').onclick = () => {
-        Paddle.Checkout.open({
-          product: productId,
-          email: email,
-          successCallback: () => {
-            window.location.href = window.location.pathname + "?success=true";
-          },
-          errorCallback: (err) => {
-            console.error("Checkout failed:", err);
-            alert("Checkout failed. See console for details.");
-          }
-        });
-      };
-    };
-  </script>
-</body>
+      Paddle.Checkout.open({
+        items: [{ priceId: "pri_01jyk3h7eec66x5m7h31p66r8w" }],
+        customer: { email },
+        settings: {
+          displayMode: "inline",
+        },
+      });
+    </script>
+  </body>
 </html>
