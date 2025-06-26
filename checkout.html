@@ -1,26 +1,77 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8" />
   <title>UniPilot Checkout</title>
   <script src="https://cdn.paddle.com/paddle.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2em;
+      text-align: center;
+      background-color: #f4f4f4;
+    }
+    h2 {
+      margin-bottom: 1em;
+    }
+    #fallback-button {
+      display: none;
+      padding: 1em 2em;
+      font-size: 16px;
+      background-color: #0051ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #fallback-button:hover {
+      background-color: #003fcc;
+    }
+  </style>
 </head>
 <body>
   <h2>Launching secure checkout…</h2>
+  <button id="fallback-button" onclick="launchCheckout()">Open Checkout Manually</button>
+
   <script>
     const email = new URLSearchParams(window.location.search).get("email") || "";
 
-    Paddle.Environment.set("sandbox");
-    Paddle.Setup({
-      token: "test_c25cc3df5ddfcd6b3b2a8420700"
-    });
+    function launchCheckout() {
+      if (!window.Paddle || !Paddle.Checkout) {
+        alert("Paddle failed to load.");
+        return;
+      }
 
-    Paddle.Checkout.open({
-      items: [{ priceId: "pri_01jyk3h7eec66x5m7h31p66r8w" }],
-      customer: { email },
-      settings: {
-        displayMode: "redirect",
-        successUrl: "https://lukashvelidze.github.io/unipilot/?success=true",
-        cancelUrl: "https://lukashvelidze.github.io/unipilot/"
+      Paddle.Checkout.open({
+        items: [{ priceId: "pri_01jyk3h7eec66x5m7h31p66r8w" }],
+        customer: { email },
+        settings: {
+          displayMode: "redirect",
+          successUrl: "https://lukashvelidze.github.io/unipilot/?success=true",
+          cancelUrl: "https://lukashvelidze.github.io/unipilot/"
+        }
+      });
+    }
+
+    // Wait until Paddle is fully loaded
+    window.addEventListener("load", () => {
+      if (window.Paddle) {
+        Paddle.Environment.set("sandbox");
+        Paddle.Setup({
+          token: "test_c25cc3df5ddfcd6b3b2a8420700"
+        });
+
+        // Try to launch automatically
+        setTimeout(() => {
+          try {
+            launchCheckout();
+          } catch (e) {
+            console.warn("Autolaunch failed:", e);
+            document.getElementById("fallback-button").style.display = "inline-block";
+          }
+        }, 500); // slight delay to ensure setup is complete
+      } else {
+        document.getElementById("fallback-button").style.display = "inline-block";
       }
     });
   </script>
