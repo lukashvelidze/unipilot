@@ -67,6 +67,16 @@
     </div>
 
     <h2>Your Journey to Studying Abroad Starts Here</h2>
+    <button onclick="redirectToCheckout()">Subscribe Now</button>
+
+      <script>
+        function redirectToCheckout() {
+          // Replace with dynamic user email if available
+          const email = "test@example.com";
+          window.location.href = `checkout.html?email=${encodeURIComponent(email)}`;
+        }
+      </script>
+
     <p>UniPilot helps students from India, Georgia, and beyond navigate their way to universities in the US, UK, Germany, and more. From application to arrival – it's your all-in-one guide.</p>
 
     <div class="section pricing">
