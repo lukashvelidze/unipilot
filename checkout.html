@@ -8,27 +8,24 @@
 <body>
   <button id="buy">Subscribe Now</button>
 
+  <script src="https://cdn.paddle.com/paddle.js"></script>
   <script>
-      console.log('Paddle object:', Paddle);
+    window.onload = () => {
+      Paddle.Setup({ vendor: 33436 });
 
-  document.getElementById('buy').onclick = () => {
-    console.log('Button clicked, opening checkout');
-    try {
-      Paddle.Checkout.open({
-        product: 123456, // Replace with your product ID number
-        email: email,
-        successCallback: () => {
-          console.log('Success callback triggered');
-          window.location.href = window.location.pathname + "?success=true";
-        },
-        errorCallback: (err) => {
-          console.error('Paddle checkout error:', err);
-        }
-      });
-    } catch (e) {
-      console.error('Error calling Paddle.Checkout.open:', e);
-    }
-  };
-  </script>
+      const email = new URLSearchParams(window.location.search).get('email') || '';
+
+      document.getElementById('buy').onclick = () => {
+        Paddle.Checkout.open({
+          product: 123456,
+          email: email,
+          successCallback: () => {
+            window.location.href = window.location.pathname + "?success=true";
+          },
+        });
+      };
+    };
+</script>
+
 </body>
 </html>
