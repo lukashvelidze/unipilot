@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>UniPilot Checkout</title>
-  <script src="https://cdn.paddle.com/paddle.js"></script>
+
   <style>
     body {
       margin: 0;
@@ -69,43 +69,42 @@
   </div>
 
   <script>
-    Paddle.Environment.set("sandbox");
-    Paddle.Initialize({
-      token: "test_c25cc3df5ddfcd6b3b2a8420700",
-      eventCallback: function(data) {
-        console.log("Paddle Event:", data);
-      }
-    });
+    function initializePaddle() {
+      Paddle.Environment.set("sandbox");
 
-    const itemsList = [
-      {
-        priceId: 'pri_01jyk3h7eec66x5m7h31p66r8w',
-        quantity: 1
-      }
-    ];
+      Paddle.Initialize({
+        token: "test_c25cc3df5ddfcd6b3b2a8420700",
+        eventCallback: function(data) {
+          console.log("Paddle Event:", data);
+        }
+      });
 
-    const customerInfo = {
-      email: "sam@example.com",
-      address: {
-        countryCode: "US",
-        postalCode: "10021"
-      }
-    };
+      const itemsList = [
+        {
+          priceId: 'pri_01jyk3h7eec66x5m7h31p66r8w',
+          quantity: 1
+        }
+      ];
 
-    function openCheckout(items, customer) {
-      Paddle.Checkout.open({
-        items: items,
-        customer: customer
+      const customerInfo = {
+        email: "sam@example.com",
+        address: {
+          countryCode: "US",
+          postalCode: "10021"
+        }
+      };
+
+      document.getElementById("checkoutBtn").addEventListener("click", function () {
+        Paddle.Checkout.open({
+          items: itemsList,
+          customer: customerInfo
+        });
       });
     }
-
-    document.addEventListener("DOMContentLoaded", function() {
-      const btn = document.getElementById("checkoutBtn");
-      btn.addEventListener("click", function() {
-        openCheckout(itemsList, customerInfo);
-      });
-    });
   </script>
+
+  <!-- Load Paddle script and wait until it's ready -->
+  <script src="https://cdn.paddle.com/paddle.js" onload="initializePaddle()"></script>
 
 </body>
 </html>
