@@ -62,7 +62,7 @@
 
   <div class="container">
     <h1>Upgrade to Premium</h1>
-    <button class="checkout-button" onclick="openCheckout(itemsList, customerInfo)">Continue</button>
+    <button id="checkoutBtn" class="checkout-button">Continue</button>
     <div class="footer">
       Secured by Paddle
     </div>
@@ -98,6 +98,13 @@
         customer: customer
       });
     }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const btn = document.getElementById("checkoutBtn");
+      btn.addEventListener("click", function() {
+        openCheckout(itemsList, customerInfo);
+      });
+    });
   </script>
 
 </body>
