@@ -3,117 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>UniPilot – Study Abroad Made Easy</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
+  <title>UniPilot Checkout</title>
+  <script src="https://cdn.paddle.com/paddle.js"></script>
   <style>
     body {
-      font-family: 'Inter', sans-serif;
       margin: 0;
       padding: 0;
-      background: #ffffff;
-      color: #333;
-    }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 2rem;
-      text-align: center;
-    }
-    .logo {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #ff6b00;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f9fa;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
+      height: 100vh;
     }
-    .logo img {
-      height: 40px;
+
+    .container {
+      text-align: center;
+      padding: 2rem;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
     }
-    h2 {
-      font-size: 1.5rem;
-      margin-top: 1.5rem;
+
+    h1 {
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
+      color: #111827;
     }
-    .section {
-      margin-top: 2rem;
-      text-align: left;
+
+    .checkout-button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: white;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border: none;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
     }
-    .pricing {
-      background: #f9f9f9;
-      padding: 1.5rem;
-      border-radius: 8px;
-      display: inline-block;
+
+    .checkout-button:hover {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
     }
+
     .footer {
-      margin-top: 3rem;
-      font-size: 0.9rem;
-      color: #888;
-    }
-    a {
-      color: #ff6b00;
-      text-decoration: none;
-    }
-    hr {
-      margin: 2rem 0;
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: #6b7280;
     }
   </style>
 </head>
 <body>
+
   <div class="container">
-    <div class="logo">
-      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" alt="Grad Cap" />
-      UniPilot
-    </div>
-
-    <h2>Your Journey to Studying Abroad Starts Here</h2>
-    <button onclick="redirectToCheckout()">Subscribe Now</button>
-
-      <script>
-        function redirectToCheckout() {
-          // Replace with dynamic user email if available
-          const email = "test@example.com";
-          window.location.href = `checkout.html?email=${encodeURIComponent(email)}`;
-        }
-      </script>
-
-    <p>UniPilot helps students from India, Georgia, and beyond navigate their way to universities in the US, UK, Germany, and more. From application to arrival – it's your all-in-one guide.</p>
-
-    <div class="section pricing">
-      <h3>Pricing</h3>
-      <p>Start with UniPilot for just <strong>$4.99/month</strong></p>
-      <p>Includes: Visa checklists • Personalized roadmap • Reminders • Travel prep</p>
-    </div>
-
-    <div class="section">
-      <h3>Contact</h3>
-      <p>Email us at <a href="mailto:support@unipilotapp.com">lukashvelidze.official@gmail.com</a></p>
-    </div>
-
-    <hr />
-
-    <div class="section" id="terms">
-      <h3>Terms of Service</h3>
-      <p>By using UniPilot, you agree to use the app for personal, non-commercial purposes. UniPilot provides guidance and tools to support international students and does not guarantee admission or visa approvals. Users are responsible for providing accurate information and following official processes of embassies and universities.</p>
-    </div>
-
-    <div class="section" id="privacy">
-      <h3>Privacy Policy</h3>
-      <p>We value your privacy. UniPilot collects only essential information (such as email and user input) to personalize your experience. We do not sell your data. All data is stored securely and you can contact us at any time to delete your account and data.</p>
-    </div>
-
-    <div class="section" id="refund">
-      <h3>Refund Policy</h3>
-      <p>If you are not satisfied with UniPilot within the first 7 days of your subscription, you can request a full refund by contacting <a href="mailto:support@unipilotapp.com">support@unipilotapp.com</a>. Refunds are processed within 5–10 business days.</p>
-    </div>
-
+    <h1>Upgrade to Premium</h1>
+    <button class="checkout-button" onclick="openCheckout(itemsList, customerInfo)">Continue</button>
     <div class="footer">
-      © 2025 UniPilot. All rights reserved. |
-      <a href="#terms">Terms</a> |
-      <a href="#privacy">Privacy</a> |
-      <a href="#refund">Refund Policy</a>
+      Secured by Paddle
     </div>
   </div>
+
+  <script>
+    Paddle.Environment.set("sandbox");
+    Paddle.Initialize({
+      token: "test_7d279f61a3499fed520f7cd8c08",
+      eventCallback: function(data) {
+        console.log("Paddle Event:", data);
+      }
+    });
+
+    const itemsList = [
+      {
+        priceId: 'pri_01gsz8x8sawmvhz1pv30nge1ke',
+        quantity: 10
+      },
+      {
+        priceId: 'pri_01gsz98e27ak2tyhexptwc58yk',
+        quantity: 1
+      }
+    ];
+
+    const customerInfo = {
+      email: "sam@example.com",
+      address: {
+        countryCode: "US",
+        postalCode: "10021"
+      }
+    };
+
+    function openCheckout(items, customer) {
+      Paddle.Checkout.open({
+        items: items,
+        customer: customer
+      });
+    }
+  </script>
+
 </body>
 </html>
-
