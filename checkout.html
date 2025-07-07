@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -78,4 +79,64 @@
 
   <script src="script.js"></script>
 </body>
+=======
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>UniPilot Inline Checkout</title>
+    <script src="https://cdn.paddle.com/paddle.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 2em;
+        background-color: #f4f4f4;
+        text-align: center;
+      }
+      #checkout-container {
+        margin-top: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Subscribe to UniPilot Premium</h2>
+    <div id="checkout-container"></div>
+
+    <script type="text/javascript">
+      // Extract email from query string
+      const urlParams = new URLSearchParams(window.location.search);
+      const email = urlParams.get("email") || "test@example.com";
+
+      // Configure Paddle environment
+      Paddle.Environment.set("sandbox"); // Use "production" when ready
+
+      // Initialize Paddle
+      Paddle.Initialize({
+        token: "test_c25cc3df5ddfcd6b3b2a8420700", // your real client-side token
+        checkout: {
+          settings: {
+            displayMode: "inline",
+            frameTarget: "checkout-container",
+            frameInitialHeight: "450",
+            frameStyle:
+              "width: 100%; min-width: 312px; background-color: transparent; border: none;"
+          }
+        }
+      });
+
+      // Define items
+      const items = [
+        {
+          priceId: "pri_01jyk3h7eec66x5m7h31p66r8w",
+          quantity: 1
+        }
+      ];
+
+      // Open checkout inline
+      Paddle.Checkout.open({
+        items,
+        customer: { email }
+      });
+    </script>
+  </body>
+>>>>>>> db3f3a9c24db7188c46b3d4245bd63c611316809
 </html>
