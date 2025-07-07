@@ -1,60 +1,81 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>UniPilot Checkout</title>
-    <script src="https://cdn.paddle.com/paddle.js"></script>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        padding: 2em;
-        text-align: center;
-        background-color: #f4f4f4;
-      }
-      h2 {
-        margin-bottom: 1em;
-      }
-    </style>
-  </head>
-  <body>
-    <h2>Redirecting to Paddle...</h2>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up Now</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page-container">
+    <h1>Sign up now</h1>
+    <div class="grid">
+      <div class="checkout-container">
+        <!-- Checkout content will be injected here -->
+      </div>
+      <div>
+        <h3>Items</h3>
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th>Product name</th>
+              <th>Price name</th>
+              <th>Quantity</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>0</td>
+              <td>00.00</td>
+            </tr>
+          </tbody>
+        </table>
 
-    <script>
-      const urlParams = new URLSearchParams(window.location.search);
-      const email = urlParams.get("email") || "test@example.com";
+        <h3>Totals</h3>
+        <table>
+          <tbody>
+            <tr>
+              <td>One-time charges</td>
+              <td id="oneTimeTotal">0.00</td>
+            </tr>
+            <tr>
+              <td>Recurring charges</td>
+              <td id="recurringTotal">0.00</td>
+            </tr>
+            <tr>
+              <td>Discount</td>
+              <td id="discountTotal">0.00</td>
+            </tr>
+            <tr>
+              <td>Taxes</td>
+              <td id="taxTotal">0.00</td>
+            </tr>
+            <tr>
+              <td>Total today</td>
+              <td id="totalToday">0.00</td>
+            </tr>
+          </tbody>
+        </table>
 
-      function loadCheckout() {
-        if (typeof Paddle === "undefined") {
-          setTimeout(loadCheckout, 100);
-          return;
-        }
+        <p>
+          <a href="#" onclick="switchPlan()"><b>Switch plan</b></a>
+        </p>
+      </div>
+    </div>
+  </div>
 
-        try {
-          Paddle.Environment.set("sandbox"); // change to "production" when live
+  <footer>
+    <hr />
+    <p><small>
+      For the tutorial, check out:
+      <a href="https://developer.paddle.com/build/checkout/build-branded-inline-checkout?utm_source=dx&utm_medium=codepen">Build an inline checkout</a> -
+      <a href="https://developer.paddle.com/?utm_source=dx&utm_medium=codepen">developer.paddle.com</a>
+    </small></p>
+  </footer>
 
-          Paddle.Initialize({
-            token: "test_c25cc3df5ddfcd6b3b2a8420700", // your test client token
-          });
-
-          Paddle.Checkout.open({
-            items: [
-              {
-                priceId: "pri_01jyk3h7eec66x5m7h31p66r8w", // your real priceId
-              },
-            ],
-            customer: {
-              email,
-            },
-            settings: {
-              displayMode: "overlay", // use 'overlay' for mobile
-            },
-          });
-        } catch (error) {
-          document.body.innerHTML = "<h2>Error loading Paddle checkout</h2><pre>" + error + "</pre>";
-        }
-      }
-
-      loadCheckout();
-    </script>
-  </body>
+  <script src="script.js"></script>
+</body>
 </html>
