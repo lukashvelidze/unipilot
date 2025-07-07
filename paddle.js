@@ -44,36 +44,14 @@ function updateSummaryTable(totals, recurringTotals) {
 
 Paddle.Environment.set("sandbox");
 Paddle.Initialize({
-  token: "test_7d279f61a3499fed520f7cd8c08", // replace with a client-side token
+  token: "test_c25cc3df5ddfcd6b3b2a8420700", // replace with a client-side token
   eventCallback: updateTable
 });
 
 // define items
 let monthItemsList = [
   {
-    priceId: 'pri_01gsz8x8sawmvhz1pv30nge1ke',
-    quantity: 10
-  },
-  {
-    priceId: 'pri_01gsz95g2zrkagg294kpstx54r',
-    quantity: 1
-  },
-  {
-    priceId: 'pri_01gsz98e27ak2tyhexptwc58yk',
-    quantity: 1
-  }
-];
-let yearItemsList = [
-  {
-    priceId: 'pri_01gsz8z1q1n00f12qt82y31smh',
-    quantity: 10
-  },
-  {
-    priceId: 'pri_01gsz96z29d88jrmsf2ztbfgjg',
-    quantity: 1
-  },
-  {
-    priceId: 'pri_01gsz98e27ak2tyhexptwc58yk',
+    priceId: 'pro_01jyk34xa92kd6h2x3vw7sv5tf',
     quantity: 1
   }
 ];
